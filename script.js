@@ -1,6 +1,7 @@
 const queryInput = document.querySelector('#search-input');
 const resultsList = document.querySelector('#dropdown-menu');
 const addedRepositoriesList = document.querySelector('#repo-list');
+let timer = null;
 
 queryInput.addEventListener('input', async (event) => {
     const query = event.target.value; 
@@ -8,11 +9,13 @@ queryInput.addEventListener('input', async (event) => {
         resultsList.style.display = 'none';
         return;
       }
-    setTimeout(async () => {
+  
+      clearTimeout(timer);
 
-  const response = await fetch(`https://api.github.com/search/repositories?q=${query}`);
-  const data = await response.json();
-        
+  timer = setTimeout(async () => {
+    const response = await fetch(`https://api.github.com/search/repositories?q=${query}`);
+    const data = await response.json();
+
   resultsList.innerHTML = '';
   resultsList.style.display = 'block';
 
@@ -28,7 +31,7 @@ queryInput.addEventListener('input', async (event) => {
     resultsList.appendChild(resultItem);
     }
   }, 1000)
-});
+})
 
 function addRepository(repository) {
   resultsList.style.display = 'none';
